@@ -64,7 +64,6 @@ class UserController
             return response()->json(["error" => "Account already exists"], status: 400);
         }
 
-        // Automatically log in the user after registration
         $this->userService->login(email: $validated["email"], password: $validated["password"]);
         $req->session()->regenerate();
 
