@@ -53,7 +53,7 @@ function CreatePost({
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     className="bg-gray-100 w-full p-4 h-28 rounded-md"
-                    placeholder="What's on your mind?"
+                    placeholder="What's on your playlist?"
                 ></textarea>
                 <div className="flex justify-between flex-col md:flex-row gap-2 md:gap-0 mt-2">
                     <div className="flex items-center gap-2">

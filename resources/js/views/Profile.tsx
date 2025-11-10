@@ -19,26 +19,24 @@ function Profile() {
     const auth = useContext(AuthContext);
 
     useEffect(() => {
-        loadUser();
-    }, [params]); // Fetch a different profile if the username changes
+        loadUserAndFollow();
+    }, [params, auth.authenticatedUser]); // Reload when username changes or auth state changes
 
-    useEffect(() => {
-        // Check if the user is following the profile that they are viewing.
-        loadFollow();
-    }, [user, auth.authenticatedUser]); // We need to make sure that the profile and the authenticated user is fetched first.
+    async function loadUserAndFollow() {
+        if (!params.username) return;
 
-    async function loadUser() {
-        let user = await userService.getUserByUsername(params.username!);
+        // Load user profile first
+        const user = await userService.getUserByUsername(params.username);
         if (user == null) return;
 
         setUser(user);
-    }
 
-    async function loadFollow() {
-        if (user == null || auth.authenticatedUser == null) return;
-
-        if (!isSelf()) {
-            setFollowId(await followService.getFollowing(user.id));
+        // Load follow status in parallel if viewing someone else's profile
+        if (auth.authenticatedUser != null && auth.authenticatedUser.username !== user.username) {
+            const followId = await followService.getFollowing(user.id);
+            setFollowId(followId);
+        } else {
+            setFollowId(null);
         }
     }
 

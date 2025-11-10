@@ -33,7 +33,7 @@ function Settings() {
 
     async function logout() {
         await auth.logout();
-        setLocation("/login");
+        setLocation("/");
     }
 
     return (

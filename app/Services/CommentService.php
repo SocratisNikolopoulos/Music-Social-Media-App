@@ -31,13 +31,23 @@ class CommentService
 
     public function getPostComments(string $postId)
     {
-        $comments = Comment::where("post_id", $postId)->orderBy("created_at", "desc")->get();
+        $comments = Comment::where("post_id", $postId)->orderBy("created_at", "desc")->limit(50)->get();
+
+        // Prefetch all user IDs to avoid N+1 queries
+        $userIds = [];
+        foreach ($comments as $comment) {
+            $userIds[] = $comment->user_id;
+        }
+        $userIds = array_unique($userIds);
+
+        // Batch fetch all users
+        $userMetaCache = $this->userService->getUserMetaByIds($userIds);
 
         $res = [];
         foreach ($comments as $comment) {
             array_push($res, new CommentResponse(
                 comment: $comment,
-                author: $this->userService->getUserMetaById($comment->user_id)
+                author: $userMetaCache[$comment->user_id] ?? null
             ));
         }
 

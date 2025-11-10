@@ -14,10 +14,9 @@ function PostList({
     user?: string | null;
 }) {
     const [posts, setPosts] = useState<PostResponse[]>([]);
-
-    let currentPage = 1;
-    let lastPage = 0;
-    let fetching = false;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(0);
+    const [fetching, setFetching] = useState(false);
 
     useEffect(() => {
         renderPosts(1);
@@ -39,17 +38,18 @@ function PostList({
             document.documentElement.scrollHeight - window.innerHeight;
 
         if (currentScroll / maxScrollHeight > 0.7 || maxScrollHeight == 0) {
-            fetching = true;
-            currentPage++;
-            await renderPosts(currentPage);
-            fetching = false;
+            setFetching(true);
+            const nextPage = currentPage + 1;
+            setCurrentPage(nextPage);
+            await renderPosts(nextPage);
+            setFetching(false);
         }
     }
 
     async function renderPosts(page: number) {
         let response = await postService.getPosts(page, user);
-        currentPage = response.current_page;
-        lastPage = response.last_page;
+        setCurrentPage(response.current_page);
+        setLastPage(response.last_page);
 
         setPosts((p) => [...p, ...response.data]);
     }

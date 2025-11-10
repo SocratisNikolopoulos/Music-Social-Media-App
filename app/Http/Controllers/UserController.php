@@ -124,9 +124,14 @@ class UserController
         return response($hash);
     }
 
-    public function logout()
+    public function logout(Request $req)
     {
         Auth::guard("web")->logout();
+
+        $req->session()->invalidate();
+        $req->session()->regenerateToken();
+
+        return response('');
     }
 
     public function getUserDetails()

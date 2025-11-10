@@ -34,15 +34,31 @@ export const AuthProvider = (props: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         const user = await authService.loginWithPassword(email, password);
-        setAuthenticatedUser(user);
 
-        return user != null;
+        // Fetch fresh CSRF cookie after session regeneration
+        await fetch("http://localhost/sanctum/csrf-cookie", {
+            credentials: "include",
+        });
+
+        // Reload user with fresh session
+        const freshUser = await authService.loadUser();
+        setAuthenticatedUser(freshUser);
+
+        return freshUser != null;
     };
 
     const register = async (email: string, password: string, name: string) => {
         const user = await authService.register(email, password, name);
-        setAuthenticatedUser(user);
-        return user;
+
+        // Fetch fresh CSRF cookie after session regeneration
+        await fetch("http://localhost/sanctum/csrf-cookie", {
+            credentials: "include",
+        });
+
+        // Reload user with fresh session
+        const freshUser = await authService.loadUser();
+        setAuthenticatedUser(freshUser);
+        return freshUser;
     };
 
     const resetPassword = async (email: string) => {
@@ -52,6 +68,11 @@ export const AuthProvider = (props: { children: ReactNode }) => {
     const logout = async () => {
         await authService.logout();
         setAuthenticatedUser(null);
+
+        // Fetch fresh CSRF cookie after session invalidation
+        await fetch("http://localhost/sanctum/csrf-cookie", {
+            credentials: "include",
+        });
     };
 
     return (
