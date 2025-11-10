@@ -294,6 +294,16 @@ music-social-media-app/
 - `POST /api/users/{id}/follow` - Follow/unfollow user
 - `GET /api/following` - Get following list
 
+## App preview
+
+<img width="1709" height="940" alt="Screenshot 2025-11-10 082439" src="https://github.com/user-attachments/assets/83edf3c9-d82f-4065-9152-0d730e53824d" />
+
+<img width="1700" height="925" alt="Screenshot 2025-11-10 082532" src="https://github.com/user-attachments/assets/91807082-c65d-490f-9ff4-3eab9a348d50" />
+
+<img width="1710" height="961" alt="Screenshot 2025-11-10 083401" src="https://github.com/user-attachments/assets/ae796e70-f7b8-4cd0-8657-627bd0da4192" />
+
+<img width="1705" height="923" alt="Screenshot 2025-11-10 083518" src="https://github.com/user-attachments/assets/3a3d2d6e-1b59-43a0-98a5-d2dea341d5ec" />
+
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
